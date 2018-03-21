@@ -18,7 +18,9 @@ Use the following command:
 
     docker rm lfs ;                                    \
     docker build --tag lfs . &&                        \
-    sudo docker run -it --privileged --name lfs lfs && \
+    sudo docker run -it --privileged --name lfs \
+    -v /etc/localtime:/etc/localtime:ro \
+    lfs && \
     sudo docker cp lfs:/tmp/lfs.iso .
 
 Please note, that extended privileges are required by docker container in order to execute some commands (e.g. mount).

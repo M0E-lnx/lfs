@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ -x /bin/uname.bin ]; then
+  UNAME=/bin/uname.bin
+elif [ -x /tools/bin/uname.bin ]; then
+  UNAME=/tools/bin/uname.bin
+fi
+$UNAME $@ | sed 's?x86_64?i586?g'

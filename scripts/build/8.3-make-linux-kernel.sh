@@ -4,6 +4,18 @@ echo "Building linux kernel.."
 echo "Approximate build time: 4.4 - 66.0 SBU (typically about 6 SBU)"
 echo "Required disk space: 960 - 4250 MB (typically about 1100 MB)"
 
+ARCH=$(uname -m)
+case $ARCH in
+	i?86)
+		MARCH=i386 ;;
+	x86_64)
+		MARCH=x86_64 ;;
+esac
+
+echo "Will compil kernel for $MARCH"
+sleep 10
+
+
 # 8.3. Linux package contains the Linux kernel
 tar -xf /sources/linux-*.tar.xz -C /tmp/ \
   && mv /tmp/linux-* /tmp/linux \
@@ -19,8 +31,16 @@ make mrproper
 # NOTE manual way is by launching:
 # make menuconfig
 cp /tools/kernel.config .config
-# compile
-make
+####
+# Use a VERY VANILLA DEFAULT CONFIG
+
+#cp arch/x86/configs/i_defconfig .config || exit 1
+
+####
+# compile, and select the default option when prompted.
+make ARCH=${MARCH} olddefconfig
+make ARCH=${MARCH}
+#yes "" | make 
 # installation
 make modules_install
 # copy kernel image

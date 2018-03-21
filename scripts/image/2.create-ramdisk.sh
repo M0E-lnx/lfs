@@ -2,6 +2,8 @@
 set -e
 echo "Creating ramdisk.."
 
+export LOOP=$(losetup -f)
+
 LOOP_DIR=$(pwd)/$LOOP
 RAMDISK=$(pwd)/ramdisk
 
@@ -12,7 +14,7 @@ dd if=/dev/zero of=$RAMDISK bs=1k count=$IMAGE_SIZE
 losetup $LOOP $RAMDISK
 
 # make an ext2 filesystem
-mke2fs -q -i 16384 -m 0 $LOOP $IMAGE_SIZE
+mke2fs -t ext2 -q -i 16384 -m 0 $LOOP $IMAGE_SIZE
 
 # ensure loop2 directory
 [ -d $LOOP_DIR ] || mkdir -pv $LOOP_DIR
